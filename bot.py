@@ -80,7 +80,13 @@ def search_news_snippets(query):
         return f"❌ Could not fetch news from SerpAPI. Please try again later.\n(Error: {e})"
 
 # 🤖 Gemini-Based Fact Checking
-prompt = f"""
+def fact_check_claim_with_gemini(claim):
+    news = search_news_snippets(claim)
+
+    if "❌" in news or "⚠️" in news:
+        return news
+
+    prompt = f"""
 You are an intelligent fact-checking assistant.
 
 Your task is to assess the truthfulness of the following claim by analyzing supporting or contradictory information from recent news articles.
@@ -100,15 +106,13 @@ Provide a short 2-line explanation and cite at least one article title or link i
 Be neutral and concise.
 """
 
-
-
-
     try:
         model = genai.GenerativeModel(model_name="models/gemini-1.5-pro")
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception as e:
         return f"❌ Gemini error: {e}"
+
 
 # 🤖 Telegram Bot Handlers
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):

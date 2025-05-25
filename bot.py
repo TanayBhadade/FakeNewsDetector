@@ -107,7 +107,7 @@ Be neutral and concise.
 """
 
     try:
-        model = genai.GenerativeModel(model_name="models/gemini-1.5-pro")
+        model = genai.GenerativeModel(model_name="models/gemini-2.0-flash")
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception as e:
